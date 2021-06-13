@@ -1,0 +1,250 @@
+﻿1061<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script type="text/javascript">
+        var datas = [{
+            question: "1.(甲)台積電晶圓代工半導體產業 (乙)太平洋食品加工業 (丙)中國鋼鐵、中國石油化業。若依據臺灣工業發展階段，上述產業發展先後依序為何？ ",//題目
+            options: ["甲乙丙",
+                      "乙丙甲",
+                      "丙甲乙",
+                      "丙乙甲"],//選項
+            correctAns: 'B',//正確答案
+            ans: null//回答答案.null未答
+        }, {
+            question: "2.在單位面積上投入大量的勞力、資本等，以提高平均收穫量的農業經營方式，稱為下列何者？",
+            options: ["有機農業",
+                      "休閒農業",
+                      "粗放農業",
+                      "集約農業"],
+            correctAns: 'D',
+            ans: null
+        }, {
+            question: "3.近年來，臺灣積極種植經濟價值較高的農業產品及休閒農業，這些現象和臺灣加入哪一個國際性組織有密切關係？",
+            options: ["歐盟(EU) ",
+                      "世界貿易組織(WTO)",
+                      "世界衛生組織(WHO)",
+                      "亞太經濟合作會議(APEC)"],
+            correctAns: 'B',
+            ans: null
+        }, {
+            question: "4.十大建設時期臺灣工業活動轉以下列何者為主？",
+            options: ["輕工業", "重工業", "高科技工業", "農產品加工業"],
+            correctAns: 'B',
+            ans: null
+        }, {
+            question: "5.臺灣早期外銷主力，對臺灣經濟發展曾有很大貢獻的兩種經濟作物為何？",
+            options: ["茶葉、甘蔗", 
+                      "甘蔗、小麥", 
+                      "小麥、花生", 
+                      "花生、棉花"],
+            correctAns: 'A',
+            ans: null
+        }];
+        //目前瀏覽題目
+        var currentQuestion = datas[0];
+
+        //換題
+        function ChangeQuestion(index) {
+            currentQuestion = datas[index];
+            
+            $('#question').text(currentQuestion.question);
+            $('#option1').text(currentQuestion.options[0]);
+            $('#option2').text(currentQuestion.options[1]);
+            $('#option3').text(currentQuestion.options[2]);
+            $('#option4').text(currentQuestion.options[3]);
+
+        }         
+        //送出答案
+        function SendAns(send) {
+            currentQuestion.ans = send;
+            if (currentQuestion.ans == currentQuestion.correctAns) {
+                alert('恭喜，答對了');
+            }
+            else {
+                alert('答錯囉');
+            }
+            display();
+            var nextIndex = datas.indexOf(currentQuestion) + 1 >= datas.length ? 0 : datas.indexOf(currentQuestion) + 1;
+            ChangeQuestion(nextIndex);
+        }
+        //顯示答案
+        function display() {
+            datas.forEach(function (data, index) {
+                var no = index + 1;
+                var color = data.ans === data.correctAns ? 'green' : 'red';
+                $('#questionText_' + no).css('color', color);
+                if (data.ans != null) {
+                    //有答
+                    $('#questionText_' + no).text("(" + data.ans + ")");
+                } else {
+                    //未答
+                    $('#questionText_' + no).text("");
+                }
+            });
+        }
+        //交卷
+        function Finish() {
+            var sum = 0;
+            datas.forEach(function (data, index) {
+            if (data.ans === data.correctAns) {
+                sum += 20;
+            }
+            else if (data.ans == null){
+                alert('第'+(index+1)+'題未填!')
+            }
+            });
+            alert('您的得分為:' + sum);
+            reset();
+            
+        }
+        //重設正常
+        function reset() {
+            
+            datas.forEach(function (data, index) {
+                data.ans = null;
+            });
+
+            ChangeQuestion(0);
+            display();
+        }
+        //程式進入點
+        $(function () {
+            reset();
+        })
+
+    </script>
+</head>
+<body>
+    <!--選單-->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Logo</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Messages</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <!--內容-->
+        <div class="row">
+            <!--左側選單-->
+            <div class="col-sm-3 well">
+                <div class="well">
+                    <p><a href="#">GraylanWu</a></p>
+                    <img src="img\self.png" class="img-circle" height="65" width="65" alt="Avatar">
+                    <hr />
+                    <button class="btn btn-success" onclick="Finish()">交卷</button>
+                </div>
+                <div class="alert alert-success fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <p><strong>國中社會科</strong></p>
+                    一共五題，每題20分
+                    <p><strong>請作答!</strong></p>
+                    請選擇題目作答
+                </div>
+                <p><a href="#" onclick="ChangeQuestion(0)">第一題</a><span id="questionText_1"></span></p>
+                <p><a href="#" onclick="ChangeQuestion(1)">第二題</a><span id="questionText_2"></span></p>
+                <p><a href="#" onclick="ChangeQuestion(2)">第三題</a><span id="questionText_3"></span></p>
+                <p><a href="#" onclick="ChangeQuestion(3)">第四題</a><span id="questionText_4"></span></p>
+                <p><a href="#" onclick="ChangeQuestion(4)">第五題</a><span id="questionText_5"></span></p>
+            </div>
+            <!--題目-->
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-heading">
+                                題目
+                            </div>
+                            <div class="panel-body">
+                                <p id="question"> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--選項-->
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="well">
+                            <button class="btn btn-primary" onclick="SendAns('A')">A</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-6">
+                        <div class="well">
+                            <p id="option1"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="well">
+                            <button class="btn btn-primary" onclick="SendAns('B')">B</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-6">
+                        <div class="well">
+                            <p id="option2"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="well">
+                            <button class="btn btn-primary" onclick="SendAns('C')">C</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-6">
+                        <div class="well">
+                            <p id="option3"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="well">
+                            <button class="btn btn-primary" onclick="SendAns('D')">D</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-6">
+                        <div class="well">
+                            <p id="option4"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--右側選單-->
+            <div class="col-sm-2 well hidden-xs">
+
+                <div class="well">
+                    <p>ADS</p>
+                </div>
+                <div class="well">
+                    <p>這是廣告</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid text-center bg-primary">
+        <p>from 高雄市立大樹國中-109下學期-一年級社會科期中考</p>
+    </footer>
+
+</body>
+</html>
